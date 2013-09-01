@@ -1,21 +1,4 @@
-__                   ___
-|_  _  __ _  _  _|   |_     _  |    _|_ o  _ __
-|  (_) | (_ (/_(_|   |__\_/(_) | |_| |_ | (_)| |
-
-by soen
-
-Usage:
-  python fe.py <options>
-  Options:
-    TARGET=<target IP / hostname>
-    ADDR=<directory>
-    VULN_VAR=<vulnerable variable>
-    METHOD=<post/get>
-    OTHER_VARIABLES=[other variables for post/get request]
-      VAR1=DATA1&VAR2=DATA2
-    GOAL_TEXT=<server response indicating successful exploitation>
-
- TARGET,ADDR,VULN_VAR,METHOD,GOAL_TEXT are required
+Forced Evolution
 
 ================
 
