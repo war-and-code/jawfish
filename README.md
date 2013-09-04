@@ -81,3 +81,6 @@ If you want to embed this in a product that will be sold,
         - - - > https://www.eff.org/ < - - -
 
 -soen
+
+Contributors:
+	Josh Hyde for contributing a safer database for use against less resilient targets
