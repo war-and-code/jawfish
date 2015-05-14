@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Forced Evolution
 
 ================
@@ -84,3 +85,7 @@ If you want to embed this in a product that will be sold,
 
 Contributors:
 	Josh Hyde for contributing a safer database for use against less resilient targets
+=======
+# jawfish
+Jawfish is a tool designed to break into web applications.
+>>>>>>> 2535673d2e5ae7947d10574e4764ad1cabe86142
