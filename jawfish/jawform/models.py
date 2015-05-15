@@ -7,3 +7,6 @@ class Attempt(models.Model):
     method = models.CharField(max_length=200)
     goal_text = models.CharField(max_length=200)
     
+    def __str__(self):
+        return self.target
+    
