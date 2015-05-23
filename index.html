@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-dark.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <title>Jawfish by gingeleski</title>
+  </head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1>Jawfish</h1>
+        <h2>Jawfish is a tool designed to break into web applications.</h2>
+
+        <section id="downloads">
+          <a href="https://github.com/gingeleski/jawfish/zipball/master" class="btn">Download as .zip</a>
+          <a href="https://github.com/gingeleski/jawfish/tarball/master" class="btn">Download as .tar.gz</a>
+          <a href="https://github.com/gingeleski/jawfish" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
+        </section>
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        <h1>
+<a id="jawfish" class="anchor" href="#jawfish" aria-hidden="true"><span class="octicon octicon-link"></span></a>Jawfish</h1>
+
+<p>Jawfish is a tool designed to break into web applications.</p>
+
+<p>Based on <a href="https://github.com/soen-vanned/forced-evolution">Forced Evolution</a>, it is self-modifying - finding exploits and updating its internal database accordingly.</p>
+
+<h2>
+<a id="parts" class="anchor" href="#parts" aria-hidden="true"><span class="octicon octicon-link"></span></a>Parts</h2>
+
+<p><strong>Target IP</strong> - The server IP you are attacking. It is recommended to not use a hostname, as DNS lookups significantly slow the current version of Jawfish down. Example: 192.168.1.1</p>
+
+<p><strong>Address</strong> - The path URL to the vulnerable page. Example: /herp/derp/vuln.php</p>
+
+<p><strong>Vulnerability</strong> - This is the POST or GET variable that will be exploited.</p>
+
+<p><strong>Method</strong> - This can be either POST or GET, and defines the behavior of Jawfish as it communicates over HTTP POSTs and GETs.</p>
+
+<p><strong>Goal Text</strong> - The most important option to get correct, as it will define when an exploit string is deemed as working. Case is ignored. Examples: If you are attempting to bypass a login form, perhaps “Login Successful.” For command injection, an indicative server response like “Directory of.” For SQL injection, maybe “row in set.” Jawfish currently contains no capabilities for dumping databases or post-exploitation. You can take the exploit produced by Jawfish and feed it into a tool like sqlmap.</p>
+
+<h2>
+<a id="end-notes" class="anchor" href="#end-notes" aria-hidden="true"><span class="octicon octicon-link"></span></a>End notes</h2>
+
+<p>This the alpha version of Jawfish.</p>
+
+<p>Based on Soed Vanned’s <a href="https://github.com/soen-vanned/forced-evolution">Forced Evolution</a>.</p>
+      </section>
+    </div>
+
+    
+  </body>
+</html>
