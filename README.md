@@ -18,6 +18,6 @@ Based on [Forced Evolution](https://github.com/soen-vanned/forced-evolution), it
 
 ##End notes
 
-This is version 1.0 of Jawfish.
+This is the alpha of Jawfish. Backend hasn't been hooked to frontend.
 
 Based on Soed Vanned’s [Forced Evolution](https://github.com/soen-vanned/forced-evolution).
