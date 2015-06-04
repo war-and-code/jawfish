@@ -3,8 +3,9 @@ from app import app
 
 @app.route('/')
 @app.route('/index')
+@app.route('/targeting')
 def index():
-    return render_template('index.html')
+    return render_template('targetform.html')
 
 @app.route('/about')
 @app.route('/about-1')

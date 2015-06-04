@@ -1,33 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
     <div class="form_container">
-        <form>
-            <span class="tooltip on" tooltip-message="Target IP / hostname">
-                <label class="white">Target IP</label>
-                <input type="text" name="TARGET"><br><br>
-            </span>
-
-            <span class="tooltip on" tooltip-message="Directory / address">
-                <label class="white">Address</label>
-                <input type="text" name="ADDR"><br><br>
-            </span>
-
-            <span class="tooltip on" tooltip-message="Vulnerable variable">
-                <label class="white">Vulnerability</label>
-                <input type="text" name="VULN_VAR"><br><br>
-            </span>
-
-            <label class="white">Method</label>
-            <input type="text" name="METHOD"><br><br>
-
-            <span class="tooltip on" tooltip-message=
-                    "Server response indicating successful exploitation">
-                <label class="white">Goal Text</label>
-                <input type="text" name="GOAL_TEXT"><br><br>
-            </span>
-
-            <a href="#">Submit</a>
-        </form>
+        {% block targetform %} {% endblock %}
     </div>
 
     <a href="about" class="bottom_links">Using Jawfish</a>
