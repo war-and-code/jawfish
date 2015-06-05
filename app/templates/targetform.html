@@ -5,16 +5,25 @@
     <span class="tooltip on" tooltip-message="Target IP / hostname">
         <label class="white">Target IP</label>
         {{ targetform.TARGET }} <br><br>
+        {% for error in targetform.TARGET.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
     </span>
 
     <span class="tooltip on" tooltip-message="Directory / address">
         <label class="white">Address</label>
         {{ targetform.ADDR }} <br><br>
+        {% for error in targetform.ADDR.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
     </span>
 
     <span class="tooltip on" tooltip-message="Vulnerable variable">
         <label class="white">Vulnerability</label>
         {{ targetform.VULN_VAR }} <br><br>
+        {% for error in targetform.VULN_VAR.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
     </span>
 
     <label class="white">Method</label> <br>
@@ -24,6 +33,9 @@
             "Server response indicating successful exploitation">
         <label class="white">Goal Text</label>
         {{ targetform.GOAL_TEXT }} <br><br>
+        {% for error in targetform.GOAL_TEXT.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
     </span>
 
     <a onclick="document.forms['targeting'].submit()">Submit</a>

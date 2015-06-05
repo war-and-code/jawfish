@@ -5,8 +5,10 @@ from .targetform import TargetForm
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
 @app.route('/targeting', methods=['GET', 'POST'])
-def index():
+def targeting():
     targetform = TargetForm()
+    if targetform.validate_on_submit(): # If everything in the form is filled out
+        return render_template('targetform.html', targetform=targetform)
     return render_template('targetform.html', targetform=targetform)
 
 @app.route('/about')
