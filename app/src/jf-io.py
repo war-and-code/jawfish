@@ -36,7 +36,7 @@ DB = ''
 
 def process_web_form(web_TARGET, web_ADDR, web_VULN_VAR, web_METHOD, web_GOAL_TEXT):
     global BASE_RESPONSE, REQ_TOTAL, METHOD, GOAL_TEXT, TARGET, ADDR,\
-        OTHER_VARIABLES, VULN_VAR
+        OTHER_VARIABLES, VULN_VAR, FINAL_RESULT
     try:
         TARGET = web_TARGET
         FINAL_RESULT + '\n' + '[+]\tTarget %s acquired!' % TARGET
@@ -130,7 +130,7 @@ def create_creatures(num, genome_length, tools):
 
 
 def cull_it(c):
-    global CULL_RATE
+    global CULL_RATE, FINAL_RESULT
     c_temp = PriorityQueue()
     qsize = c.qsize()
     l = int(qsize - qsize * CULL_RATE)
@@ -178,6 +178,7 @@ def mutate(s):
 
 
 def breed_it(ca):
+    global FINAL_RESULT
     c_temp = PriorityQueue()
     FINAL_RESULT + '\n' + '[.]\tBreeding Next Generation...'
     while len(ca) > 0:
@@ -214,7 +215,7 @@ def breed_it(ca):
 
 
 def fitnessfunction(creature_to_score):
-    global GOAL_TEXT
+    global GOAL_TEXT, FINAL_RESULT
     if creature_to_score.modified == 0:
       return 0
     s = creature_to_score.run_simulation()
@@ -248,7 +249,7 @@ def fitnessfunction(creature_to_score):
 
 
 def main():
-    global CREATURE_COUNT
+    global CREATURE_COUNT, FINAL_RESULT
     if process_command_line():
         c0 = []
         c1 = PriorityQueue()
