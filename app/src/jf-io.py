@@ -26,6 +26,9 @@ REQ_TOTAL = 0
 BASE_RESPONSE = ''
 METHOD = 'get'  # default is get, but post is allowed as well
 
+# Concatenate onto this string everything that would FINAL_RESULT + '\n' + to the console normally
+FINAL_RESULT = ''
+
 ###DBSTARTMARKER###
 DB = ''
 ###DBENDMARKER###
@@ -36,19 +39,19 @@ def process_web_form(web_TARGET, web_ADDR, web_VULN_VAR, web_METHOD, web_GOAL_TE
         OTHER_VARIABLES, VULN_VAR
     try:
         TARGET = web_TARGET
-        print '[+]\tTarget %s acquired!' % TARGET
+        FINAL_RESULT + '\n' + '[+]\tTarget %s acquired!' % TARGET
         ADDR = web_ADDR
         if ADDR[0] == '/':
             ADDR = ADDR[1:]
-        print '[+]\tPath %s acquired!' % ADDR
+        FINAL_RESULT + '\n' + '[+]\tPath %s acquired!' % ADDR
         VULN_VAR = web_VULN_VAR
-        print '[+]\tPotentially vulnerable variable %s registered!' % VULN_VAR
+        FINAL_RESULT + '\n' + '[+]\tPotentially vulnerable variable %s registered!' % VULN_VAR
         METHOD = web_METHOD.lower()
-        print '[+]\tUsing method [%s] for GREAT success' %\
+        FINAL_RESULT + '\n' + '[+]\tUsing method [%s] for GREAT success' %\
             ((METHOD and 'post') or 'get')
         OTHER_VARIABLES = {}
         GOAL_TEXT = web_GOAL_TEXT
-        print '[+]\tAttempting to gain a base heuristic...'
+        FINAL_RESULT + '\n' + '[+]\tAttempting to gain a base heuristic...'
         OTHER_VARIABLES[VULN_VAR] = 'AAAA'
         BASE_RESPONSE = requests.get(
             'http://%s/%s' % (TARGET, ADDR),
@@ -57,16 +60,16 @@ def process_web_form(web_TARGET, web_ADDR, web_VULN_VAR, web_METHOD, web_GOAL_TE
         ).text
         if (BASE_RESPONSE.lower().find('not found') != -1 or
                 BASE_RESPONSE.lower().find('404') != -1):
-            print '404 or \'not found\' discovered on page....are you' + \
+            FINAL_RESULT + '\n' + '404 or \'not found\' discovered on page....are you' + \
                   'sure this is OK?'
-            print '\npage text:\n\n'
-            print BASE_RESPONSE
-            print
+            FINAL_RESULT + '\n' + '\npage text:\n\n'
+            FINAL_RESULT + '\n' + BASE_RESPONSE
+            FINAL_RESULT + '\n' +
             if not raw_input('y/n').lower().find('y'):
                 exit(0)
         return True
     except:
-        print 'web form argument FAIL\n\n'
+        FINAL_RESULT + '\n' + 'web form argument FAIL\n\n'
         return False
 
 
@@ -84,7 +87,7 @@ class Creature:
             self.genome = tools
         else:
             tmp = args
-            #print 'creating genome with '+ str(tmp) + 'chars'
+            #FINAL_RESULT + '\n' + 'creating genome with '+ str(tmp) + 'chars'
             for i in range(random.randint(tmp / 2, tmp)):
                 self.genome += tools[random.randrange(0, len(tools))]
         return None
@@ -131,9 +134,9 @@ def cull_it(c):
     c_temp = PriorityQueue()
     qsize = c.qsize()
     l = int(qsize - qsize * CULL_RATE)
-    print '[i]\tPopulation size %d, cull rate %s, living specimens: %d' %\
+    FINAL_RESULT + '\n' + '[i]\tPopulation size %d, cull rate %s, living specimens: %d' %\
     (c.qsize(), str(CULL_RATE), l)
-    print '[.]\tBeginning the cull of underperforming creatures...'
+    FINAL_RESULT + '\n' + '[.]\tBeginning the cull of underperforming creatures...'
     for i in range(l):
         flag = 0
         while flag == 0:
@@ -141,7 +144,7 @@ def cull_it(c):
             if tmp[1].genome != '':
                 c_temp.put(tmp)
                 flag = 1
-    print '[+]\tCull done!'
+    FINAL_RESULT + '\n' + '[+]\tCull done!'
     return c_temp
 
 
@@ -176,7 +179,7 @@ def mutate(s):
 
 def breed_it(ca):
     c_temp = PriorityQueue()
-    print '[.]\tBreeding Next Generation...'
+    FINAL_RESULT + '\n' + '[.]\tBreeding Next Generation...'
     while len(ca) > 0:
         if len(ca) == 1:
             cq = ca.pop(0)
@@ -206,7 +209,7 @@ def breed_it(ca):
         c_temp.put((0, d))
         c_temp.put((0, e))
         c_temp.put((0, f))
-    print '[.]\tSuccess'
+    FINAL_RESULT + '\n' + '[.]\tSuccess'
     return c_temp
 
 
@@ -221,15 +224,15 @@ def fitnessfunction(creature_to_score):
         return
     if ((creature_to_score.genome.find('cat') != -1) and
             (creature_to_score.genome.find('key') != -1)):
-        print ' this bastard should work....'
-        print creature_to_score.genome
-        print s['text']
-        print s['url']
+        FINAL_RESULT + '\n' + ' this bastard should work....'
+        FINAL_RESULT + '\n' + creature_to_score.genome
+        FINAL_RESULT + '\n' + s['text']
+        FINAL_RESULT + '\n' + s['url']
     if (s['text'].lower().find(GOAL_TEXT.lower()) != -1):
         creature_to_score.score -= 100
-        print '[+]\tExploit Found'
-        print creature_to_score.genome
-        print '------------------------------------------'
+        FINAL_RESULT + '\n' + '[+]\tExploit Found'
+        FINAL_RESULT + '\n' + creature_to_score.genome
+        FINAL_RESULT + '\n' + '------------------------------------------'
         save_DB(creature_to_score.genome)
         return 1
     elif (str(s['status_code']) == '500'):
@@ -249,7 +252,7 @@ def main():
     if process_command_line():
         c0 = []
         c1 = PriorityQueue()
-        print '[+]\tLoading DB...'
+        FINAL_RESULT + '\n' + '[+]\tLoading DB...'
         #load in creatures from DB
         lc = load_DB()
         #f = open('database', 'a')
@@ -259,8 +262,8 @@ def main():
         #f.close()
         loaded_creatures = lc.split('\n')
         #finish loading
-        print '[+]\tSuccess'
-        print '[+]\tCreating initial batch of creatures...'
+        FINAL_RESULT + '\n' + '[+]\tSuccess'
+        FINAL_RESULT + '\n' + '[+]\tCreating initial batch of creatures...'
         cl = create_creatures(CREATURE_COUNT, GENOME_LENGTH, tools)
         generation = 0
         for i in cl:
@@ -269,20 +272,20 @@ def main():
             c1.put((50, Creature(0, i)))
             for ii in range(0, GENE_POOL_INFLUENCE-1):
                 c1.put((50, Creature(0, mutate(i))))
-        print '[+]\tSuccess'
-        print '[+]\tPre-breeding in loaded creatures with the population' +\
+        FINAL_RESULT + '\n' + '[+]\tSuccess'
+        FINAL_RESULT + '\n' + '[+]\tPre-breeding in loaded creatures with the population' +\
             ' for great success'
         while not c1.empty():
             c = c1.get()[1]
             c0.append(c)
         c1 = breed_it(c0)
         c1 = c0
-        print '[+]\tSuccess'
+        FINAL_RESULT + '\n' + '[+]\tSuccess'
         exploit_found = 0
         while exploit_found == 0:
             generation += 1
             CREATURE_COUNT = c1.qsize()
-            print '[>]\tRunning with creature_count %d,\tgeneration %d' %\
+            FINAL_RESULT + '\n' + '[>]\tRunning with creature_count %d,\tgeneration %d' %\
                 (CREATURE_COUNT, generation)
             c2 = PriorityQueue(0)
             cached_c = 0
@@ -296,7 +299,7 @@ def main():
                     exploit_found = 1
                     break
                 c2.put((c.score, c))
-            print '[i]\tEfficiency %s, cached[%d], total[%d]' %\
+            FINAL_RESULT + '\n' + '[i]\tEfficiency %s, cached[%d], total[%d]' %\
             (str((total_c-cached_c) * 1.0 / total_c),cached_c,total_c)
             c3 = cull_it(c2)
             c4 = []
@@ -304,15 +307,16 @@ def main():
                 c = c3.get()[1]
                 c4.append(c)
             c1 = breed_it(c4)
-        print '[i]\tExploit found in %d seconds with %d requests' %\
+        FINAL_RESULT + '\n' + '[i]\tExploit found in %d seconds with %d requests' %\
             (abs(int(start_time - time.time())), REQ_TOTAL)
+        return FINAL_RESULT
 
 
 def load_DB():
     if DB != '':
         return zlib.decompress(base64.b64decode(DB))
     else:
-        print '[!]\tInternal database not found, attempting to load ' +\
+        FINAL_RESULT + '\n' + '[!]\tInternal database not found, attempting to load ' +\
               'external...'
         lc = ''
         f = open('database', 'a')
@@ -336,4 +340,4 @@ def save_DB(exploit_found):
     f.close()
 
 if __name__ == '__main__':
-    main()
+    return main()
