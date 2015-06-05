@@ -1,11 +1,13 @@
-from flask import render_template
+from flask import render_template, flash, redirect
 from app import app
+from .targetform import TargetForm
 
-@app.route('/')
-@app.route('/index')
-@app.route('/targeting')
+@app.route('/', methods=['GET', 'POST'])
+@app.route('/index', methods=['GET', 'POST'])
+@app.route('/targeting', methods=['GET', 'POST'])
 def index():
-    return render_template('targetform.html')
+    targetform = TargetForm()
+    return render_template('targetform.html', targetform=targetform)
 
 @app.route('/about')
 @app.route('/about-1')
