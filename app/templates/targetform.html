@@ -1,6 +1,6 @@
 {% extends "index.html" %}
 {% block targetform %}
-<form action=“” method=“post” name=“targeting”>
+<form method=“post” name=“targeting” id="targeting">
 
     <span class="tooltip on" tooltip-message="Target IP / hostname">
         <label class="white">Target IP</label>
@@ -26,6 +26,6 @@
         {{ targetform.GOAL_TEXT }} <br><br>
     </span>
 
-    <a href="#">Submit</a>
+    <a onclick="document.forms['targeting'].submit()">Submit</a>
 </form>
 {% endblock %}

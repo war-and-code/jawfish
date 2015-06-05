@@ -81,6 +81,7 @@ a, .white {
     text-decoration: none;
     letter-spacing: 1px;
     font-family: 'Lato', sans-serif;
+    cursor: pointer;
 }
 
 a {
