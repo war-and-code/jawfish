@@ -1,6 +1,7 @@
 from flask import render_template, flash, redirect
 from app import app
 from .targetform import TargetForm
+from .jfweb import process_web_form
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
