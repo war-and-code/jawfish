@@ -8,8 +8,8 @@ from .jfweb import process_web_form
 @app.route('/targeting', methods=['GET', 'POST'])
 def targeting():
     targetform = TargetForm()
-    if targetform.validate_on_submit(): # If everything in the form is filled out
-        return render_template('targetform.html', targetform=targetform)
+    if targetform.validate_on_submit():
+        return redirect('/result')
     return render_template('targetform.html', targetform=targetform)
 
 @app.route('/about')
@@ -24,3 +24,7 @@ def about2():
 @app.route('/about-3')
 def about3():
     return render_template('about3.html')
+
+@app.route('/result')
+def result():
+    return render_template('result.html')
