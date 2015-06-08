@@ -1,5 +1,5 @@
 from flask import render_template, flash, redirect
-from app import app
+from jawfish import app
 from .targetform import TargetForm
 from .jfweb import process_web_form
 
