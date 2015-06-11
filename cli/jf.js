@@ -67,23 +67,47 @@ function Creature() {
     var score = 100;
     var m_text = {};
 
-    this.init(self, args, tools) {
+    this.init(args, tools) {
         this.genome = '';
         this.modified = 1;
         this.is_alive = true;
 
         if (args == 0) {
-            self.genome = tools;
+            this.genome = tools;
         } else {
-            tmp = args;
+            var tmp = args;
             console.log("Creating genome with " + tmp + " characters");
             // TODO for in range
+            // for…in loop
+            // random integer - lower limit (arguments/2) - upper limit (arguments)
         }
 
         return 0;
     }
 
-    // TODO run simulation on self
+    this.run_simulation() {
+        var tmp = OTHER_VARIABLES;
+        tmp[VULN_VAR] = this.genome;
+
+        try {
+
+            if (METHOD == 0) {
+                var r;  // TODO http get request
+            } else {
+                var r;  // TODO http post request
+            }
+
+            REQ_TOTAL += 1;
+            this.m_text['text'] = r.text;
+            this.m_text['url'] = r.url;
+            this.m_text['status_code'] = r.status_code;
+
+        } catch (e) {
+            // Forced Evolution ignored errors - ignoring them too for now
+        }
+
+        return self.m_text;
+    }
 }
 
 // TODO create creatures
