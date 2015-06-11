@@ -1,10 +1,10 @@
 #Jawfish
 
-Jawfish is a tool designed to break into web applications.
+Jawfish is a tool for breaking into web applications.
 
-Based on [Forced Evolution](https://github.com/soen-vanned/forced-evolution), it is self-modifying - finding exploits and updating its internal database accordingly.
+Based on [Forced Evolution](https://github.com/soen-vanned/forced-evolution), it's self-modifying - finding exploits and updating an internal database accordingly.
 
-[Check out the Github Page for this.](https://gingeleski.github.io/jawfish)
+[Visit jawfish.io to see it in action.](//jawfish.io)
 
 ##Parts
 
@@ -22,6 +22,6 @@ Jawfish currently contains no capabilities for dumping databases or post-exploit
 
 ##End notes
 
-This is the alpha of Jawfish. Backend hasn't been hooked to frontend.
+This is the alpha release of Jawfish. Backend hasn't been hooked to frontend.
 
 Based on Soed Vanned’s [Forced Evolution](https://github.com/soen-vanned/forced-evolution).
