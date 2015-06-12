@@ -177,3 +177,17 @@ a:hover:after {
     background: #ff4e1f;
     visibility: none;
 }
+
+#result_box {
+    height: 13em;
+    width: 22em;
+    border: 1px solid #fff;
+    overflow: auto;
+    margin-bottom: 1.5em;
+    background-color: #000;
+    -ms-filter: "alpha(opacity=30)";
+    filter: alpha(opacity=30);
+    -khtml-opacity: 0.3;
+    -moz-opacity: 0.3;
+    opacity: 0.3;
+}
