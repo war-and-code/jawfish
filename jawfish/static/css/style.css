@@ -182,12 +182,16 @@ a:hover:after {
     height: 13em;
     width: 22em;
     border: 1px solid #fff;
-    overflow: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
     margin-bottom: 1.5em;
-    background-color: #000;
-    -ms-filter: "alpha(opacity=30)";
-    filter: alpha(opacity=30);
-    -khtml-opacity: 0.3;
-    -moz-opacity: 0.3;
-    opacity: 0.3;
+    font-family: "Courier New", Courier, monospace;
+    font-weight: bold;
+    color: #ff4e1f;
+    text-transform: uppercase;
+}
+
+#result_box p {
+    width: 22em;
+    word-wrap: break-word;
 }
