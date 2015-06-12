@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from flask import render_template, flash, redirect
 from jawfish import app
 from .targetform import TargetForm
@@ -12,16 +13,16 @@ def targeting():
 @app.route('/about')
 @app.route('/about-1')
 def about():
-    return render_template('about1.html')
+    return render_template('about1.html', title='What is Jawfish?')
 
 @app.route('/about-2')
 def about2():
-    return render_template('about2.html')
+    return render_template('about2.html', title='Parts of the targeting form')
 
 @app.route('/about-3')
 def about3():
-    return render_template('about3.html')
+    return render_template('about3.html', title='Ending notes')
 
 @app.route('/result')
 def result():
-    return render_template('result.html')
+    return render_template('result.html', title='Jawfish -')
