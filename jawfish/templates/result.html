@@ -1,6 +1,41 @@
-{% extends "base.html" %}
-{% block content %}
-<div class="form_container">
-    <a href="/">Re-Target</a>
-</div>
-{% endblock %}
+<!doctype html>
+<html class="no-js" lang="">
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>Jawfish -</title>
+
+    <meta name="description" content="Jawfish is a tool designed to break
+        into web applications.">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="icon" href="static/favicon.ico" type="image/x-icon">
+
+    <link rel="stylesheet" type="text/css" href="static/css/style.css">
+
+    <script src="/static/script/brython.js"></script>
+
+</head>
+<body onload="brython()">
+    <div class="container">
+    <section class="splash">
+
+        <div class="island">
+            <img id="logo" src="static/img/jawfish.png" />
+
+            <div class="form_container">
+                <script type="text/python" src="jf-web.py"></script>
+
+                <a href="/">Re-Target</a>
+            </div>
+        </div>
+
+    </section>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+</body>
+</html>
