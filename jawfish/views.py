@@ -1,15 +1,12 @@
 from flask import render_template, flash, redirect
 from jawfish import app
 from .targetform import TargetForm
-from .jfweb import process_web_form
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
 @app.route('/targeting', methods=['GET', 'POST'])
 def targeting():
     targetform = TargetForm()
-    if targetform.validate_on_submit():
-        return redirect('/result')
     return render_template('targetform.html', targetform=targetform)
 
 @app.route('/about')
