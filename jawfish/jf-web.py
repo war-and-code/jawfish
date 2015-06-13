@@ -12,7 +12,7 @@ Version 1.0
 '''
 
 from sys import argv
-from Queue import PriorityQueue
+from queue import PriorityQueue
 import time
 import random
 import base64
