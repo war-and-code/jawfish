@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from flask import render_template, flash, redirect
+from flask import render_template, flash, redirect, send_file
 from jawfish import app
 from .targetform import TargetForm
 
@@ -26,3 +26,7 @@ def about3():
 @app.route('/result')
 def result():
     return render_template('result.html', title='Jawfish -')
+
+@app.route('/jf-web.py')
+def jfweb():
+    return send_file('jf-web.py')

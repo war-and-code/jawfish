@@ -17,6 +17,14 @@
     <link rel="stylesheet" type="text/css" href="static/css/style.css">
 
     <script src="/static/script/brython.js"></script>
+    <script>
+        var url = window.location.href;
+        var slice_start = url.search( 'RGET=' );
+        slice_start = slice_start + 5;
+        var slice_end = url.search( '&ADDR' );
+        var target_ip = url.slice( slice_start, slice_end );
+        document.title = ("Jawfish - " + target_ip);
+    </script>
 
 </head>
 <body onload="brython()">
@@ -26,7 +34,7 @@
         <div class="island">
             <img id="logo" src="static/img/jawfish.png" />
 
-            <script type="text/python" src="jf-web.py"></script>
+            <script type="text/python" src="/jf-web.py"></script>
 
             <div id="result_box"></div>
 
