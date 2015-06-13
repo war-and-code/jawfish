@@ -20,7 +20,6 @@ import zlib
 import urllib
 import urllib2
 from browser import document, html, window
-import requests
 
 def result_out(text_to_result_box):
     document['result_box'] <= html.P(text_to_result_box)
@@ -132,15 +131,16 @@ class Creature:
         tmp[VULN_VAR] = self.genome
         try:
             if METHOD == 0:
-                r = requests.get('http://%s/%s' % (TARGET, ADDR),
-                                 params=tmp, timeout=TIMEOUT)
+                prep = urllib.urlencode(tmp)
+                r = urllib2.urlopen('http://%s/%s' % (TARGET, ADDR), data=prep, timeout=TIMEOUT)
             else:
-                r = requests.post('http://%s/%s' % (TARGET, ADDR),
-                                  data=tmp, timeout=TIMEOUT)
+                prep = urllib.urlencode(tmp)
+                req = urllib2.Request('http://%s/%s' % (TARGET, ADDR), data=prep)
+                r = urllib2.urlopen(req)
             REQ_TOTAL += 1
-            self.m_text['text'] = r.text
-            self.m_text['url'] = r.url
-            self.m_text['status_code'] = r.status_code
+            self.m_text['text'] = r.get_data()
+            self.m_text['url'] = r.get_full_url()
+            self.m_text['status_code'] = r.getcode()
         except:
             pass
         return self.m_text
