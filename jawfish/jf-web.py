@@ -18,8 +18,9 @@ import random
 import base64
 import zlib
 import urllib
-import requests
+import urllib2
 from browser import document, html, window
+import requests
 
 def result_out(text_to_result_box):
     document['result_box'] <= html.P(text_to_result_box)
@@ -89,14 +90,13 @@ def process_targeting_form():
         GOAL_TEXT = url_string.split('&GOAL_TEXT=')[1]
         result_out('[+]\tAttempting to gain a base heuristic...')
         OTHER_VARIABLES[VULN_VAR] = 'AAAA'
-        BASE_RESPONSE = requests.get(
-            'http://%s/%s' % (TARGET, ADDR),
-            params=OTHER_VARIABLES,
-            timeout=3
-        ).text
+        try:
+            BASE_RESPONSE = urllib2.urlopen('http://%s/%s' % (TARGET, ADDR), timeout=10)
+        except urllib2.URLError:
+            BASE_RESPONSE = '404'
         if (BASE_RESPONSE.lower().find('not found') != -1 or
                 BASE_RESPONSE.lower().find('404') != -1):
-            result_out('404 or \'not found\' discovered on page....are you sure this is OK?')
+            result_out('404 or \'not found\' or timeout....are you sure this is OK?')
             result_out('\npage text:\n\n')
             result_out(BASE_RESPONSE)
             skip_line()
