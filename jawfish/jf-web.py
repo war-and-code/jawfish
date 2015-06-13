@@ -18,7 +18,6 @@ import random
 import base64
 import zlib
 import urllib
-import urllib2
 from browser import document, html, window
 
 def result_out(text_to_result_box):
@@ -44,8 +43,27 @@ def usage():
     skip_line()
     result_out('All are required but OTHER_VARIABLES')
 
-start_time = time.time()
-result_out('Start time = ' + start_time)
+def unquote(s):
+    """unquote('abc%20def') -> 'abc def'."""
+    mychr = chr
+    myatoi = int
+    list = s.split('%')
+    res = [list[0]]
+    myappend = res.append
+    del list[0]
+    for item in list:
+        if item[1:2]:
+            try:
+                myappend(mychr(myatoi(item[:2], 16))
+                     + item[2:])
+            except ValueError:
+                myappend('%' + item)
+        else:
+            myappend('%' + item)
+    return "".join(res)
+
+start_time = time.ctime()
+result_out('Start = ' + str(start_time))
 OTHER_VARIABLES = {}
 GOAL_TEXT = 'KEY_DATA'
 tools = """~!@#$%^&*()_+{}|:"<>?,./;'[]\=-0987654321`qwertyuioplkjhgfdsa""" +\
@@ -73,7 +91,7 @@ def process_targeting_form():
     global BASE_RESPONSE, REQ_TOTAL, METHOD, GOAL_TEXT, TARGET, ADDR,\
         OTHER_VARIABLES, VULN_VAR
     url_string = window.location.href
-    url_string = urllib.unquote( url_string )
+    url_string = unquote( url_string )
     try:
         TARGET = ((url_string.split('?TARGET='))[1].split('&ADDR')[0])
         result_out('[+]\tTarget %s acquired!' % TARGET)
@@ -90,8 +108,8 @@ def process_targeting_form():
         result_out('[+]\tAttempting to gain a base heuristic...')
         OTHER_VARIABLES[VULN_VAR] = 'AAAA'
         try:
-            BASE_RESPONSE = urllib2.urlopen('http://%s/%s' % (TARGET, ADDR), timeout=10)
-        except urllib2.URLError:
+            BASE_RESPONSE = urllib.urlopen('http://%s/%s' % (TARGET, ADDR), timeout=10)
+        except urllib.URLError:
             BASE_RESPONSE = '404'
         if (BASE_RESPONSE.lower().find('not found') != -1 or
                 BASE_RESPONSE.lower().find('404') != -1):
@@ -132,11 +150,11 @@ class Creature:
         try:
             if METHOD == 0:
                 prep = urllib.urlencode(tmp)
-                r = urllib2.urlopen('http://%s/%s' % (TARGET, ADDR), data=prep, timeout=TIMEOUT)
+                r = urllib.urlopen('http://%s/%s' % (TARGET, ADDR), data=prep, timeout=TIMEOUT)
             else:
                 prep = urllib.urlencode(tmp)
-                req = urllib2.Request('http://%s/%s' % (TARGET, ADDR), data=prep)
-                r = urllib2.urlopen(req)
+                req = urllib.Request('http://%s/%s' % (TARGET, ADDR), data=prep)
+                r = urllib.urlopen(req)
             REQ_TOTAL += 1
             self.m_text['text'] = r.get_data()
             self.m_text['url'] = r.get_full_url()

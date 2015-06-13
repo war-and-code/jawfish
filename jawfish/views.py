@@ -27,6 +27,18 @@ def about3():
 def result():
     return render_template('result.html', title='Jawfish -')
 
+# File routing fix for Brython
 @app.route('/jf-web.py')
 def jfweb():
     return send_file('jf-web.py')
+
+# File routing fix for Brython
+@app.route('/urllib2.py')
+@app.route('/static/script/Lib/site-packages/urllib2.py')
+def urllib2():
+    return send_file('static/script/Lib/urllib2.py')
+
+# File routing fix for Brython
+@app.route('/static/script/Lib/site-packages/httplib.py')
+def httplib():
+    return send_file('static/script/Lib/httplib.py')
