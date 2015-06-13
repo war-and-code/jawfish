@@ -1,5 +1,12 @@
 {% extends "about.html" %}
 {% block entry %}
+    <h3 class="about">Parts of the targeting form</h3>
+    <p class="about"><span>Target IP</span> - The server IP you are attacking. It is recommended to not use a hostname, as DNS
+        lookups significantly slow the current version of Jawfish down. Example: 192.168.1.1</p>
+    <p class="about"><span>Address</span> - The path URL to the vulnerable page. Example: /herp/derp/vuln.php</p>
+    <p class="about"><span>Vulnerability</span> - This is the POST or GET variable to be exploited.</p>
+    <p class="about" style="margin-bottom: 2em;"><span>Method</span> - This can be either POST or GET, for the penetration test method. Defines the behavior
+        of Jawfish as it communicates over HTTP POSTs and GETs.</p>
     <a href="/about-1" class="bottom_links">Previous page</a>
     <a href="/about-3" class="bottom_links">Next page</a>
 {% endblock %}

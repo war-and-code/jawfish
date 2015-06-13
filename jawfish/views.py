@@ -21,7 +21,11 @@ def about2():
 
 @app.route('/about-3')
 def about3():
-    return render_template('about3.html', title='Ending notes')
+    return render_template('about3.html', title='Parts of the targeting form')
+
+@app.route('/about-4')
+def about4():
+    return render_template('about4.html', title='Ending notes')
 
 @app.route('/result')
 def result():
