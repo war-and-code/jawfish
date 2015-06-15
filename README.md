@@ -22,6 +22,4 @@ Jawfish currently contains no capabilities for dumping databases or post-exploit
 
 ##End notes
 
-This is the alpha release of Jawfish. Backend hasn't been hooked to frontend.
-
 Based on Soed Vanned’s [Forced Evolution](https://github.com/soen-vanned/forced-evolution).
