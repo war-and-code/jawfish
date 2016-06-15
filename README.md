@@ -4,8 +4,6 @@ Jawfish is a tool for breaking into web applications.
 
 Based on [Forced Evolution](https://github.com/soen-vanned/forced-evolution), it's self-modifying - finding exploits and updating an internal database accordingly.
 
-[Visit jawfish.io to see it in action.](//jawfish.io)
-
 ##Parts
 
 **Target IP** - The server IP you are attacking. It is recommended to not use a hostname, as DNS lookups significantly slow the current version of Jawfish down. Example: 192.168.1.1
