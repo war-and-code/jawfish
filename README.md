@@ -23,5 +23,3 @@ Jawfish currently contains no capabilities for dumping databases or post-exploit
 ##Trying to run Jawfish locally?
 
 After downloading or cloning the repo, you will need to locally set up Flask in the "flask" folder. [This is a good tutorial.](http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world)
-
-Alternatively, [jawfish.io](https://jawfish.io) is a live instance of this code and gets updated when there are major changes.
