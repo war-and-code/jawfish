@@ -1,5 +1,5 @@
-from flask.ext.wtf import Form
-from wtforms import SelectField, StringField
+#from flask.ext.wtf import Form
+from wtforms import Form, SelectField, StringField
 from wtforms.validators import DataRequired
 
 class TargetForm(Form):
