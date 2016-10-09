@@ -2,12 +2,9 @@
 
 '''
 Jawfish is a tool designed to break into web applications.
-
 Built on top of Soen Vanned's Forced Evolution.
 https://github.com/soen-vanned/forced-evolution
-
 Loaded into the web app (jawfish.io) via Brython.
-
 Version 1.0
 '''
 
@@ -93,7 +90,7 @@ def process_targeting_form():
     url_string = window.location.href
     url_string = unquote( url_string )
     try:
-        TARGET = ((url_string.split('?TARGET='))[1].split('&ADDR')[0])
+        TARGET = ((url_string.split('TARGET='))[1].split('&ADDR')[0])
         result_out('[+]\tTarget %s acquired!' % TARGET)
         ADDR = ((url_string.split('&ADDR='))[1].split('&VULN_VAR')[0])
         if ADDR[0] == '/':
