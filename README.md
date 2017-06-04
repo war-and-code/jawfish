@@ -1,10 +1,10 @@
-#Jawfish
+# Jawfish
 
 Jawfish is a tool for breaking into web applications.
 
 Based on [Forced Evolution](https://github.com/soen-vanned/forced-evolution), it's self-modifying - finding exploits and updating an internal database accordingly.
 
-##Parts
+## Parts
 
 **Target IP** - The server IP you are attacking. It is recommended to not use a hostname, as DNS lookups significantly slow the current version of Jawfish down. Example: 192.168.1.1
 
@@ -18,6 +18,6 @@ Based on [Forced Evolution](https://github.com/soen-vanned/forced-evolution), it
 
 Jawfish currently contains no capabilities for dumping databases or post-exploitation. You can take the exploit produced by Jawfish and feed it into a tool like sqlmap.
 
-##Trying to run Jawfish locally?
+## Trying to run Jawfish locally?
 
 After downloading or cloning the repo, you will need to locally set up Flask in the "flask" folder. [This is a good tutorial.](http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world)
